@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2beta6
+kind: Config
+metadata:
+  name: share-it
+build:
+  artifacts:
+  - image: twill/share-it
+deploy:
+  kubectl:
+    manifests:
+    - k8s/app.yaml
