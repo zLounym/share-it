@@ -18,24 +18,24 @@ jobs:
     - name: Build with Maven
       run: mvn install
     - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: jar-file
-          path: target/*.jar
+      uses: actions/upload-artifact@v2
+      with:
+        name: jar-file
+        path: target/*.jar
   
   dockerize:
     runs-on: ubuntu-latest
     steps:
     - name: Download artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: target/*.jar
+      uses: actions/download-artifact@v2
+      with:
+        name: target/*.jar
     - name: Login to DockerHub
       uses: crazy-max/ghaction-docker-login@v1
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Run Skaffold command
-        uses: hiberbee/github-action-skaffold@latest
-        with:
-          command: build
+      uses: hiberbee/github-action-skaffold@latest
+      with:
+        command: build
