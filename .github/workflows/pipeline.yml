@@ -24,6 +24,7 @@ jobs:
         path: target/*.jar
   
   dockerize:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
     - name: Download artifacts
