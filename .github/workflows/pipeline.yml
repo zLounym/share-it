@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -19,3 +17,25 @@ jobs:
         java-version: 11
     - name: Build with Maven
       run: mvn install
+    - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: jar-file
+          path: target/*.jar
+  
+  dockerize:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: target/*.jar
+    - name: Login to DockerHub
+      uses: crazy-max/ghaction-docker-login@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Run Skaffold command
+        uses: hiberbee/github-action-skaffold@latest
+        with:
+          command: build
