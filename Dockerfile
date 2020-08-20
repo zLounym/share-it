@@ -4,6 +4,6 @@ RUN apk --no-cache --update add fontconfig ttf-dejavu
 
 EXPOSE 8000
 
-ADD target/*-SNAPSHOT.jar /app.jar
+ADD *-SNAPSHOT.jar /app.jar
 
 ENTRYPOINT ["java", "-Djava.net.preferIPv4Stack=true", "-jar", "/app.jar"]
