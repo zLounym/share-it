@@ -30,7 +30,7 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
-        name: target/*.jar
+        name: jar-file
     - name: Login to DockerHub
       uses: crazy-max/ghaction-docker-login@v1
       with:
