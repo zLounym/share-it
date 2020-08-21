@@ -21,19 +21,29 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import cz.zlounym.shareit.exception.UsernameTakenException;
+import cz.zlounym.shareit.exception.UserNotAuthenticatedException;
+import cz.zlounym.shareit.exception.EmailTakenException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ControllerAdvice
 public class ControllerErrorHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(UsernameTakenException.class)
-    public void handleUsernameTakenException(
-            final UsernameTakenException exception,
+    @ExceptionHandler(UserNotAuthenticatedException.class)
+    public void handleUnauthorized(
+            final EmailTakenException exception,
             final HttpServletResponse response
     ) throws IOException {
-        log.warn("UsernameTakenException", exception);
+        log.warn("exception occurred: {}", exception.getClass().getName(), exception);
+        response.sendError(HttpStatus.UNAUTHORIZED.value(), exception.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(EmailTakenException.class)
+    public void handleEmailTakenException(
+            final EmailTakenException exception,
+            final HttpServletResponse response
+    ) throws IOException {
+        log.warn("EmailTakenException", exception);
         response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getLocalizedMessage());
     }
 

@@ -1,14 +1,9 @@
 package cz.zlounym.shareit.configuration.auth;
 
-import static cz.zlounym.shareit.configuration.auth.UserHeaders.AUTHORITIES_HEADER;
-import static cz.zlounym.shareit.configuration.auth.UserHeaders.IMPERSONATED_BY_HEADER;
-import static cz.zlounym.shareit.configuration.auth.UserHeaders.USER_NAME_HEADER;
-import static java.util.Arrays.stream;
-import static java.util.Collections.emptyList;
-import static java.util.Objects.nonNull;
+import static cz.zlounym.shareit.configuration.auth.UserHeaders.PASSWORD_HEADER;
+import static cz.zlounym.shareit.configuration.auth.UserHeaders.EMAIL_HEADER;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,44 +11,40 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.util.StringUtils;
+
+import cz.zlounym.shareit.service.AuthService;
 
 public class UserHeadersAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public static final String AUTHORITIES_HEADER_SPLITERATOR = ", ";
+    private AuthService authService;
 
-    public UserHeadersAuthenticationFilter(final RequestMatcher requiresAuthenticationRequestMatcher) {
+    public UserHeadersAuthenticationFilter(
+            final RequestMatcher requiresAuthenticationRequestMatcher,
+            final AuthService authService
+    ) {
         super(requiresAuthenticationRequestMatcher);
+        this.authService = authService;
     }
 
     @Override
     public Authentication attemptAuthentication(
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse
-    ) throws AuthenticationException {
+    ) {
+        final String email = httpServletRequest.getHeader(EMAIL_HEADER.value());
+        final String password = httpServletRequest.getHeader(PASSWORD_HEADER.value());
 
-        final String userName = httpServletRequest.getHeader(USER_NAME_HEADER.value());
-        final String authoritiesHeader = httpServletRequest.getHeader(AUTHORITIES_HEADER.value());
-        final String impersonatedBy = httpServletRequest.getHeader(IMPERSONATED_BY_HEADER.value());
+        authService.checkUserCredentials(email, password);
 
         return getAuthenticationManager().authenticate(
                 new ImpersonatedUserAuthentication(
                         ImpersonatedUser.builder()
-                                .userName(userName)
-                                .impersonatedBy(impersonatedBy)
-                                .build(),
-                        nonNull(authoritiesHeader) ?
-                                stream(authoritiesHeader.split(AUTHORITIES_HEADER_SPLITERATOR))
-                                        .filter(StringUtils::hasText)
-                                        .map(SimpleGrantedAuthority::new)
-                                        .collect(Collectors.toList())
-                                : emptyList()
+                                .email(email)
+                                .build()
                 )
         );
     }

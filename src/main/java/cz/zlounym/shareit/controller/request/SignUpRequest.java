@@ -1,9 +1,12 @@
 package cz.zlounym.shareit.controller.request;
 
-import javax.validation.constraints.Min;
+import java.util.Set;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import cz.zlounym.shareit.controller.dto.SkillDto;
 import lombok.Builder;
 import lombok.Value;
 
@@ -12,7 +15,7 @@ import lombok.Value;
 public class SignUpRequest {
 
     @NotBlank
-    String username;
+    String email;
 
     @NotBlank
     @Size(min = 5)
@@ -23,5 +26,11 @@ public class SignUpRequest {
 
     @NotBlank
     String lastName;
+
+    @NotEmpty
+    Set<SkillDto> skillsPoses;
+
+    @NotBlank
+    String skillsToLearn;
 
 }

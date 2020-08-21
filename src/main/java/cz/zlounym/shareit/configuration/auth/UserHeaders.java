@@ -5,9 +5,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum UserHeaders {
 
-    USER_NAME_HEADER("X-Consumer-Username"),
-    AUTHORITIES_HEADER("X-Consumer-Authorities"),
-    IMPERSONATED_BY_HEADER("X-Consumer-Impersonated-By");
+    EMAIL_HEADER("X-Consumer-Email"),
+    PASSWORD_HEADER("X-Consumer-Password");
 
     private final String value;
 

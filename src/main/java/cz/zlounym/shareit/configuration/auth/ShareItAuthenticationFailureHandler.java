@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TwillAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class ShareItAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     private final ObjectMapper objectMapper;
 
@@ -34,15 +34,6 @@ public class TwillAuthenticationFailureHandler implements AuthenticationFailureH
         response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
-        objectMapper.writeValue(response.getOutputStream(), AuthenticationFailureResponse.builder()
-//                .traceId(getContext().map(SpanContext::toTraceId).orElse(""))
-//                .spanId(getContext().map(SpanContext::toSpanId).orElse(""))
-                .build());
+        objectMapper.writeValue(response.getOutputStream(), AuthenticationFailureResponse.builder().build());
     }
-
-//    private Optional<SpanContext> getContext() {
-//        return Optional.ofNullable(GlobalTracer.get())
-//                .map(Tracer::activeSpan)
-//                .map(Span::context);
-//    }
 }

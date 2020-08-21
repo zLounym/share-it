@@ -15,7 +15,4 @@ class AuthenticationFailureResponse {
     @Builder.Default
     Integer status = HttpStatus.UNAUTHORIZED.value();
 
-    String traceId;
-
-    String spanId;
 }

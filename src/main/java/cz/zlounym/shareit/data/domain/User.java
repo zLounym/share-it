@@ -1,5 +1,7 @@
 package cz.zlounym.shareit.data.domain;
 
+import java.util.Set;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,12 +18,16 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    private String username;
+    private String email;
 
     private String password;
 
     private String firstName;
 
     private String lastName;
+
+    private Set<Skill> skillsPoses;
+
+    private Set<String> skillsToLearn;
 
 }

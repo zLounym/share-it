@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import cz.zlounym.shareit.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,20 +23,20 @@ import lombok.extern.slf4j.Slf4j;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String SECURED_ENDPOINT_PATTERN = "/api/**";
-    private static final String OPEN_API_CREATE = "/api/sign";
-    private static final String OPEN_API_ENTER = "/login";
+    private static final String SIGN = "/api/sign";
+    private static final String LOGIN = "/api/login";
 
-    private final TwillAuthenticationFailureHandler twillAuthenticationFailureHandler;
+    private final ShareItAuthenticationFailureHandler shareItAuthenticationFailureHandler;
+    private final AuthService authService;
 
     @Bean
-    UserHeadersAuthenticationFilter userHeadersAuthenticationFilter() throws
-            Exception {
-        final UserHeadersAuthenticationFilter filter = new UserHeadersAuthenticationFilter(new SkipPathRequestMatcher(
-                SECURED_ENDPOINT_PATTERN,
-                List.of(OPEN_API_CREATE, OPEN_API_ENTER)
-        ));
+    UserHeadersAuthenticationFilter userHeadersAuthenticationFilter() throws Exception {
+        final UserHeadersAuthenticationFilter filter = new UserHeadersAuthenticationFilter(
+                new SkipPathRequestMatcher(SECURED_ENDPOINT_PATTERN, List.of(SIGN, LOGIN)),
+                authService
+        );
         filter.setAuthenticationManager(authenticationManagerBean());
-        filter.setAuthenticationFailureHandler(twillAuthenticationFailureHandler);
+        filter.setAuthenticationFailureHandler(shareItAuthenticationFailureHandler);
         return filter;
     }
 

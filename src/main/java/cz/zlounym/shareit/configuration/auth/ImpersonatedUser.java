@@ -11,16 +11,11 @@ import lombok.Value;
 @Builder
 public class ImpersonatedUser implements Principal {
 
-    private final String userName;
-
-    private final String impersonatedBy;
+    String email;
 
     @Override
     public String getName() {
-        return userName;
+        return email;
     }
 
-    public String getAuditor() {
-        return hasText(impersonatedBy) ? impersonatedBy : userName;
-    }
 }
