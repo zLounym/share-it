@@ -23,7 +23,7 @@ jobs:
         name: jar-file
         path: target/*.jar
   
-  dockerize:
+  skaffold:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
@@ -37,25 +37,15 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Setup gcloud
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+    - run: gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --region europe-west4 --project ${{ secrets.GCP_PROJECT_ID }}
     - name: Run Skaffold command
       uses: hiberbee/github-action-skaffold@latest
       with:
-        command: build
-  
-  deploy:
-    needs: [dockerize]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup gcloud
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          version: '290.0.1'
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-      - run: gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --region europe-west4 --project ${{ secrets.GCP_PROJECT_ID }}
-      - name: Run Skaffold command
-        uses: hiberbee/github-action-skaffold@latest
-        with:
-          command: deploy
+        command: run
