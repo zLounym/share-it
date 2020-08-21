@@ -13,6 +13,5 @@ spring:
       uri: ${mongo.url}
 
 logging:
-  config: classpath:logback-cluster.xml
   level:
     net.twill: DEBUG
