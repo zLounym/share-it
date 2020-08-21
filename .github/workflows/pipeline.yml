@@ -54,7 +54,7 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
-      - run: gcloud info
+      - run: gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --region europe-west4 --project ${{ secrets.GCP_PROJECT_ID }}
       - name: Run Skaffold command
         uses: hiberbee/github-action-skaffold@latest
         with:

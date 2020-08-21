@@ -62,3 +62,14 @@ spec:
           operator: Equal
           value: "true"
           effect: NoSchedule
+
+---
+
+apiVersion: external-secrets-operator.slamdev.net/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: share-it-vault
+spec:
+  backendName: vault
+  keys:
+    - kv/data/business-apps/share-it/dev
