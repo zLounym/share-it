@@ -69,6 +69,7 @@ apiVersion: external-secrets-operator.slamdev.net/v1alpha1
 kind: ExternalSecret
 metadata:
   name: share-it-vault
+  namespace: hackathon
 spec:
   backendName: vault
   keys:
