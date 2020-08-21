@@ -47,6 +47,9 @@ spec:
               memory: 384Mi
             limits:
               memory: 512Mi
+          envFrom:
+            - secretRef:
+              name: share-it-service-vault
           readinessProbe:
             httpGet:
               path: /actuator/health
