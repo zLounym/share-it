@@ -19,6 +19,7 @@
 
 		<logstash-logback-encoder.version>6.4</logstash-logback-encoder.version>
 		<jackson.version>2.11.0</jackson.version>
+		<mongobee.version>0.13</mongobee.version>
 	</properties>
 
 	<dependencies>
@@ -35,6 +36,11 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.github.mongobee</groupId>
+			<artifactId>mongobee</artifactId>
+			<version>${mongobee.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
