@@ -1,8 +1,9 @@
 mongo:
-  dbPrefix: local
-  dbSuffix: share_it
-  db: ${mongo.dbPrefix}_${mongo.dbSuffix}
-  url: mongodb://localhost/${mongo.db}
+  user: non-prod-app
+  password: ${MONGO_PASSWORD}
+  host: dev-yqjj3.gcp.mongodb.net
+  dbPrefix: ${DEV_NAMESPACE}
+  url: mongodb+srv://${mongo.user}:${mongo.password}@${mongo.host}/${mongo.db}?retryWrites=true
 
 spring:
   application:
@@ -10,3 +11,8 @@ spring:
   data:
     mongodb:
       uri: ${mongo.url}
+
+logging:
+  config: classpath:logback-cluster.xml
+  level:
+    net.twill: DEBUG
