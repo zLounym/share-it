@@ -1,5 +1,4 @@
-mongo:
-  dbPrefix: local
-  dbSuffix: share_it
-  db: ${mongo.dbPrefix}_${mongo.dbSuffix}
-  url: mongodb://localhost/${mongo.db}
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost/local_share-it
